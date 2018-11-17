@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/lian-rr/apartment-rental/manager"
 	"net/http"
+	"strconv"
 )
 
 type Guest struct {
@@ -48,7 +49,7 @@ func addGuest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ng, err := manager.AddGuest(g)
+	g, err = manager.AddGuest(g)
 
 	if err != nil {
 		sendError(err.Error(), http.StatusInternalServerError, w)
@@ -56,7 +57,34 @@ func addGuest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(mapG2Response(ng))
+	json.NewEncoder(w).Encode(mapG2Response(g))
+}
+
+func fetchGuest(w http.ResponseWriter, r * http.Request){
+
+	p := getParams(r)
+
+	id, err := strconv.ParseInt(p["id"], 10, 64)
+
+	if err != nil {
+		sendError("Invalid format for id", http.StatusBadRequest, w)
+		return
+	}
+
+	g, err := manager.FetchGuest(int(id))
+
+	if err != nil {
+		sendError(err.Error(), http.StatusInternalServerError, w)
+		return
+	}
+
+	if g == nil {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(mapG2Response(g))
 }
 
 

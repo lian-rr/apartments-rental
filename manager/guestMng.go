@@ -54,13 +54,45 @@ func AddGuest(g *Guest) (*Guest, error) {
 	return mapD2G(ng), nil
 }
 
+func FetchGuest(id int) (*Guest, error) {
+
+	repo, err := repository.BuildGuestRepo()
+
+	if err != nil {
+		return nil, newError("Not possible to initiate the Guest Manager.", err)
+	}
+
+	defer repo.Close()
+
+	g, err := repo.FetchGuest(id)
+
+	if err != nil {
+		return nil, newError("Error fetching the guest information", err)
+	}
+
+	return mapD2G(g), nil
+
+}
+
+/*---------------------- ----- ---------------------*
+/*---------------------- Utils ---------------------*
+/*---------------------- ----- ---------------------*/
+
 func newError(m string, err error) error {
 	fmt.Printf("Error: %s", err.Error())
 	return fmt.Errorf("%s\n", m)
 }
 
 func mapG2D(g *Guest) *repository.Guest {
-	return &repository.Guest{ID: g.ID, Fname: g.Fname, Lname: g.Lname, Bdate: g.Bdate, Gender: g.Gender, Details: g.Details, Active: g.Active}
+	return &repository.Guest{
+		ID:      g.ID,
+		Fname:   g.Fname,
+		Lname:   g.Lname,
+		Bdate:   g.Bdate,
+		Gender:  g.Gender,
+		Details: g.Details,
+		Active:  g.Active,
+	}
 }
 
 func mapD2GList(gs *[]*repository.Guest) *[]*Guest {
@@ -74,5 +106,16 @@ func mapD2GList(gs *[]*repository.Guest) *[]*Guest {
 }
 
 func mapD2G(g *repository.Guest) *Guest {
-	return &Guest{ID: g.ID, Fname: g.Fname, Lname: g.Lname, Bdate: g.Bdate, Gender: g.Gender, Details: g.Details, Active: g.Active}
+	if g != nil {
+		return &Guest{
+			ID:      g.ID,
+			Fname:   g.Fname,
+			Lname:   g.Lname,
+			Bdate:   g.Bdate,
+			Gender:  g.Gender,
+			Details: g.Details,
+			Active:  g.Active,
+		}
+	}
+	return nil
 }

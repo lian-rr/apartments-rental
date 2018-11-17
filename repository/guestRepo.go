@@ -15,7 +15,7 @@ type (
 
 	GuestRepo interface {
 		ListGuests() (*[]*Guest, error)
-		FindGuest(id int) (*Guest, error)
+		FetchGuest(id int) (*Guest, error)
 		PersistGuest(g *Guest) (*Guest, error)
 		UpdateGuest(g *Guest) (*Guest, error)
 		DeleteGuest(id int) (*Guest, error)

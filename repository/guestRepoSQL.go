@@ -14,6 +14,7 @@ func newGuestRepoSQL(db *sql.DB) GuestRepSQL {
 	return GuestRepSQL{db: db}
 }
 
+//List of guests
 func (m GuestRepSQL) ListGuests() (*[]*Guest, error) {
 
 	rows, err := m.db.Query(`SELECT id, firstName, lastName, birthDay, gender, details, active FROM guest`)
@@ -39,12 +40,31 @@ func (m GuestRepSQL) ListGuests() (*[]*Guest, error) {
 	return &guests, nil
 }
 
-//FindGuest the guest by Id
-func (m GuestRepSQL) FindGuest(id int) (*Guest, error) {
-	return &Guest{}, nil
+//Fetch the guest by Id
+func (m GuestRepSQL) FetchGuest(id int) (*Guest, error) {
+
+	rows, err := m.db.Query(`SELECT id, firstName, lastName, birthDay, gender, details, active FROM guest WHERE id = ?`, id)
+
+	if err != nil {
+		fmt.Printf("Error getting guest with id %d. %s\n", id, err)
+		return nil, err
+	}
+
+	for rows.Next() {
+		g, err := parseGuest(rows)
+
+		if err != nil {
+			fmt.Printf("Error parsing the list of guests. %s\n", err)
+			return nil, err
+		}
+
+		return g, nil
+	}
+	return nil, nil
+
 }
 
-//PersistGuest the guest
+//Persist the guest
 func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 
 	stmt, err := m.db.Prepare(`INSERT INTO guest (firstName, lastName, birthDay, gender, details, active) VALUES (?, ?, ?, ?, ?, TRUE)`)
@@ -75,12 +95,12 @@ func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 
 }
 
-//UpdateGuest the guest
+//Update the guest
 func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
 	return g, nil
 }
 
-//DeleteGuest the guest by Id
+//Delete the guest by Id
 func (m GuestRepSQL) DeleteGuest(id int) (*Guest, error) {
 	return &Guest{}, nil
 }
