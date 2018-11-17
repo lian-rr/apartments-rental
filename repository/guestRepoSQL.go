@@ -14,13 +14,13 @@ func newGuestRepoSQL(db *sql.DB) GuestRepSQL {
 	return GuestRepSQL{db: db}
 }
 
-func (m GuestRepSQL) ListGuests() ([]*Guest, error) {
+func (m GuestRepSQL) ListGuests() (*[]*Guest, error) {
 
 	rows, err := m.db.Query(`SELECT id, firstName, lastName, birthDay, gender, details, active FROM guest`)
 
 	if err != nil {
 		fmt.Printf("Error getting the list of guests. %s\n", err)
-		return make([]*Guest, 0), err
+		return nil, err
 	}
 
 	var guests = make([]*Guest, 0)
@@ -30,13 +30,13 @@ func (m GuestRepSQL) ListGuests() ([]*Guest, error) {
 
 		if err != nil {
 			fmt.Printf("Error parsing the list of guests. %s\n", err)
-			return make([]*Guest, 0), err
+			return nil, err
 		}
 
 		guests = append(guests, g)
 	}
 
-	return guests, nil
+	return &guests, nil
 }
 
 //FindGuest the guest by Id

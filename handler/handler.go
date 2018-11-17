@@ -21,6 +21,7 @@ func StartServer() {
 
 func startHandlers(r *mux.Router) {
 	fmt.Println("Starting handlers\n")
+	r.HandleFunc("/guests", listGuests).Methods("GET")
 	r.HandleFunc("/guests", addGuest).Methods("POST")
 }
 

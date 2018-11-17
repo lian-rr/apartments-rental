@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-const connString = "root:rootl@tcp(localhost:3308)/apartments"
+const connString = "root:rootl@tcp(localhost:3308)/apartments?parseTime=true"
 
 func BuildGuestRepo() (GuestRepo, error) {
 	return buildGuestRepoSQL()

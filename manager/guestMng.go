@@ -16,30 +16,61 @@ type Guest struct {
 	Active  bool
 }
 
-func AddGuest(g *Guest) (*Guest, error) {
+func ListGuests() (*[]*Guest, error) {
 
-	gRepo, err := repository.BuildGuestRepo()
+	repo, err := repository.BuildGuestRepo()
 
 	if err != nil {
-		fmt.Printf("Not posible to initiate the Guest Manager\n")
-		return &Guest{}, err
+		return nil, newError("Not possible to initiate the Guest Manager.", err)
 	}
 
-	defer gRepo.Close()
+	defer repo.Close()
 
-	ng, err := gRepo.PersistGuest(mapG2D(g))
+	guests, err := repo.ListGuests()
 
 	if err != nil {
-		fmt.Printf("Not posible to persist new Guest\n")
-		return &Guest{}, err
+		return nil, newError("Not possible to get list of guests.", err)
+	}
+
+	return mapD2GList(guests), nil
+}
+
+func AddGuest(g *Guest) (*Guest, error) {
+
+	repo, err := repository.BuildGuestRepo()
+
+	if err != nil {
+		return nil, newError("Not possible to initiate the Guest Manager.", err)
+	}
+
+	defer repo.Close()
+
+	ng, err := repo.PersistGuest(mapG2D(g))
+
+	if err != nil {
+		return nil, newError("Not possible to persist new Guest.", err)
 	}
 
 	return mapD2G(ng), nil
+}
 
+func newError(m string, err error) error {
+	fmt.Printf("Error: %s", err.Error())
+	return fmt.Errorf("%s\n", m)
 }
 
 func mapG2D(g *Guest) *repository.Guest {
 	return &repository.Guest{ID: g.ID, Fname: g.Fname, Lname: g.Lname, Bdate: g.Bdate, Gender: g.Gender, Details: g.Details, Active: g.Active}
+}
+
+func mapD2GList(gs *[]*repository.Guest) *[]*Guest {
+	gl := make([]*Guest, 0)
+
+	for _, g := range *gs {
+		gl = append(gl, mapD2G(g))
+	}
+
+	return &gl
 }
 
 func mapD2G(g *repository.Guest) *Guest {

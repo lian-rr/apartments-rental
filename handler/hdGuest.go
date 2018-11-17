@@ -17,6 +17,18 @@ type Guest struct {
 	Active  bool   `json:"active, omitempty"`
 }
 
+func listGuests(w http.ResponseWriter, r *http.Request){
+
+	lg, err := manager.ListGuests()
+
+	if err != nil {
+		sendError(err.Error(), http.StatusInternalServerError, w)
+		return
+	}
+
+	json.NewEncoder(w).Encode(lg)
+}
+
 func addGuest(w http.ResponseWriter, r *http.Request) {
 
 	var gReq Guest
@@ -46,6 +58,7 @@ func addGuest(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(mapG2Response(ng))
 }
+
 
 func mCreateRB2G(g *Guest) (*manager.Guest, error) {
 
