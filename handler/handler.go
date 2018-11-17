@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const dateLayout = "2006-01-12"
+const dateLayout = "2006-01-02"
 
 func StartServer() {
 	router := mux.NewRouter()

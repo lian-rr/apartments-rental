@@ -19,5 +19,6 @@ type (
 		PersistGuest(g *Guest) (*Guest, error)
 		UpdateGuest(g *Guest) (*Guest, error)
 		DeleteGuest(id int) (*Guest, error)
+		Close() error
 	}
 )

@@ -2,8 +2,8 @@ package manager
 
 import (
 	"fmt"
-	"time"
 	"github.com/lian-rr/apartment-rental/repository"
+	"time"
 )
 
 type Guest struct {
@@ -21,14 +21,16 @@ func AddGuest(g *Guest) (*Guest, error) {
 	gRepo, err := repository.BuildGuestRepo()
 
 	if err != nil {
-		fmt.Printf("Not posible to initiate the Guest Manager")
+		fmt.Printf("Not posible to initiate the Guest Manager\n")
 		return &Guest{}, err
 	}
+
+	defer gRepo.Close()
 
 	ng, err := gRepo.PersistGuest(mapG2D(g))
 
 	if err != nil {
-		fmt.Printf("Not posible to persist new Gues")
+		fmt.Printf("Not posible to persist new Guest")
 		return &Guest{}, err
 	}
 

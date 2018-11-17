@@ -21,7 +21,10 @@ func buildGuestRepoSQL() (GuestRepo, error) {
 		return GuestRepSQL{}, err
 	}
 
-	defer db.Close()
-
 	return newGuestRepoSQL(db), nil
+}
+
+func Close(r GuestRepSQL) error{
+	fmt.Printf("Closing the DB connection")
+	return r.db.Close()
 }

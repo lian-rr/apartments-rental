@@ -47,28 +47,32 @@ func (m GuestRepSQL) FindGuest(id int) (*Guest, error) {
 //PersistGuest the guest
 func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 
-	stmt, err := m.db.Prepare(`INSERT INTO guest(firstName, lastName, birthDay, gender, details, active) VALUES ($1, $2, $3, $4, $5, TRUE)`)
+	stmt, err := m.db.Prepare(`INSERT INTO guest (firstName, lastName, birthDay, gender, details, active) VALUES (?, ?, ?, ?, ?, TRUE)`)
 
 	if err != nil {
 		fmt.Printf("Error preparing insert statement: %s\n", err)
 		return &Guest{}, err
 	}
 
-	r, err := stmt.Query(g.Fname, g.Lname, g.Bdate, g.Gender, g.Details)
+	r, err := stmt.Exec(g.Fname, g.Lname, g.Bdate, g.Gender, g.Details)
 
 	if err != nil {
 		fmt.Printf("Error executing insert statement: %s\n", err)
 		return &Guest{}, err
 	}
 
-	ng, err := parseGuest(r)
+	id, err := r.LastInsertId()
+
 
 	if err != nil {
-		fmt.Printf("Error parsing the list of guests. %s\n", err)
+		fmt.Printf("Error getting the new guest's id. %s\n", err)
 		return &Guest{}, err
 	}
 
-	return ng, nil
+	g.ID = int(id)
+	g.Active = true
+
+	return g, nil
 
 }
 
@@ -80,6 +84,11 @@ func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
 //DeleteGuest the guest by Id
 func (m GuestRepSQL) DeleteGuest(id int) (*Guest, error) {
 	return &Guest{}, nil
+}
+
+//Close the database connection
+func (m GuestRepSQL) Close() error {
+	return m.db.Close()
 }
 
 func parseGuest(rows *sql.Rows) (*Guest, error) {
