@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"time"
 )
 
@@ -24,7 +24,6 @@ func startHandlers(r *mux.Router) {
 	r.HandleFunc("/guests", addGuest).Methods("POST")
 }
 
-
 type errorResp struct {
 	Message string `json:"message"`
 }
@@ -38,8 +37,7 @@ func getParams(r *http.Request) map[string]string {
 	return mux.Vars(r)
 }
 
-
-func parseDate(s string) (time.Time, error){
+func parseDate(s string) (time.Time, error) {
 	t, err := time.Parse(dateLayout, s)
 
 	if err != nil {

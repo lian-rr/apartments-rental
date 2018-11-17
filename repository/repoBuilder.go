@@ -7,7 +7,6 @@ import (
 
 const connString = "root:rootl@tcp(localhost:3308)/apartments"
 
-
 func BuildGuestRepo() (GuestRepo, error) {
 	return buildGuestRepoSQL()
 }
@@ -24,7 +23,7 @@ func buildGuestRepoSQL() (GuestRepo, error) {
 	return newGuestRepoSQL(db), nil
 }
 
-func Close(r GuestRepSQL) error{
-	fmt.Printf("Closing the DB connection")
+func Close(r GuestRepSQL) error {
+	fmt.Printf("Closing the DB connection. \n")
 	return r.db.Close()
 }

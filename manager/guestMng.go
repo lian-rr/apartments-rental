@@ -30,7 +30,7 @@ func AddGuest(g *Guest) (*Guest, error) {
 	ng, err := gRepo.PersistGuest(mapG2D(g))
 
 	if err != nil {
-		fmt.Printf("Not posible to persist new Guest")
+		fmt.Printf("Not posible to persist new Guest\n")
 		return &Guest{}, err
 	}
 

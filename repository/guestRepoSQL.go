@@ -63,7 +63,6 @@ func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 
 	id, err := r.LastInsertId()
 
-
 	if err != nil {
 		fmt.Printf("Error getting the new guest's id. %s\n", err)
 		return &Guest{}, err
