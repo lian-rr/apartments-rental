@@ -88,6 +88,48 @@ func fetchGuest(w http.ResponseWriter, r * http.Request){
 }
 
 
+func updateGuest(w http.ResponseWriter, r *http.Request){
+	p := getParams(r)
+
+	id, err := strconv.ParseInt(p["id"], 10, 64)
+
+	if err != nil {
+		sendError("Invalid format for id", http.StatusBadRequest, w)
+		return
+	}
+
+	var gReq Guest
+
+	err = json.NewDecoder(r.Body).Decode(&gReq)
+
+	if err != nil {
+		fmt.Printf("Error parsing request body. %s ", err)
+		sendError("Request body not valid", http.StatusBadRequest, w)
+		return
+	}
+
+	g, err := mCreateRB2G(&gReq)
+	g.ID = int(id)
+
+	if err != nil {
+		sendError(err.Error(), http.StatusBadRequest, w)
+		return
+	}
+
+	g, err = manager.UpdateGuest(g)
+
+	if err != nil {
+		sendError(err.Error(), http.StatusInternalServerError, w)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(mapG2Response(g))
+}
+
+
+
+
 func mCreateRB2G(g *Guest) (*manager.Guest, error) {
 
 	bDate, err := parseDate(g.Bdate)

@@ -64,15 +64,57 @@ func FetchGuest(id int) (*Guest, error) {
 
 	defer repo.Close()
 
-	g, err := repo.FetchGuest(id)
+	g, err := fetchGuest(id, repo)
 
 	if err != nil {
-		return nil, newError("Error fetching the guest information", err)
+		return nil, err
 	}
 
 	return mapD2G(g), nil
 
 }
+
+func UpdateGuest(g *Guest) (*Guest, error) {
+
+	repo, err := repository.BuildGuestRepo()
+
+	if err != nil {
+		return nil, newError("Not possible to initiate the Guest Manager.", err)
+	}
+
+	defer repo.Close()
+
+	eG, err := fetchGuest(g.ID, repo)
+
+	if err != nil {
+		return nil, newError(fmt.Sprintf("Guest with id: %d not found", g.ID), err)
+	}
+
+	g.Active = eG.Active
+
+	ng, err := repo.UpdateGuest(mapG2D(g))
+
+	if err != nil {
+		return nil, newError("Not possible to update the guest.", err)
+	}
+
+	return mapD2G(ng), nil
+
+}
+
+
+
+
+func fetchGuest(id int, repo repository.GuestRepo) (*repository.Guest, error) {
+	g, err := repo.FetchGuest(id)
+
+	if err != nil {
+		return nil, newError("Error fetching the guest information", err)
+	}
+	return g, nil
+}
+
+
 
 /*---------------------- ----- ---------------------*
 /*---------------------- Utils ---------------------*

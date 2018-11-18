@@ -97,6 +97,21 @@ func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 
 //Update the guest
 func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
+
+	stmt, err := m.db.Prepare(`UPDATE guest SET firstName = ?, lastName = ?, birthDay = ?, gender = ?, details = ? WHERE id = ? AND active = TRUE`)
+
+	if err != nil {
+		fmt.Printf("Error preparing insert statement: %s\n", err)
+		return nil, err
+	}
+
+	_, err = stmt.Exec(g.Fname, g.Lname, g.Bdate, g.Gender, g.Details, g.ID)
+
+	if err != nil {
+		fmt.Printf("Error executing insert statement: %s\n", err)
+		return nil, err
+	}
+
 	return g, nil
 }
 
