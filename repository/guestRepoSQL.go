@@ -98,17 +98,17 @@ func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 //Update the guest
 func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
 
-	stmt, err := m.db.Prepare(`UPDATE guest SET firstName = ?, lastName = ?, birthDay = ?, gender = ?, details = ? WHERE id = ? AND active = TRUE`)
+	stmt, err := m.db.Prepare(`UPDATE guest SET firstName = ?, lastName = ?, birthDay = ?, gender = ?, details = ? WHERE id = ?`)
 
 	if err != nil {
-		fmt.Printf("Error preparing insert statement: %s\n", err)
+		fmt.Printf("Error preparing the update statement: %s\n", err)
 		return nil, err
 	}
 
 	_, err = stmt.Exec(g.Fname, g.Lname, g.Bdate, g.Gender, g.Details, g.ID)
 
 	if err != nil {
-		fmt.Printf("Error executing insert statement: %s\n", err)
+		fmt.Printf("Error executing update statement: %s\n", err)
 		return nil, err
 	}
 
@@ -116,8 +116,22 @@ func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
 }
 
 //Delete the guest by Id
-func (m GuestRepSQL) DeleteGuest(id int) (*Guest, error) {
-	return nil, nil
+func (m GuestRepSQL) DeleteGuest(id int) error {
+	stmt, err := m.db.Prepare(`UPDATE guest SET active = FALSE WHERE id = ?`)
+
+	if err != nil {
+		fmt.Printf("Error preparing the delete statement: %s\n", err)
+		return err
+	}
+
+	_, err = stmt.Exec(id)
+
+	if err != nil {
+		fmt.Printf("Error executing delete statement: %s\n", err)
+		return err
+	}
+
+	return nil
 }
 
 //Close the database connection

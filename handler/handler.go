@@ -26,6 +26,7 @@ func startHandlers(r *mux.Router) {
 	r.HandleFunc("/guests", addGuest).Methods("POST")
 	r.HandleFunc("/guests/{id}", fetchGuest).Methods("GET")
 	r.HandleFunc("/guests/{id}", updateGuest).Methods("PUT")
+	r.HandleFunc("/guests/{id}", deleteGuest).Methods("DELETE")
 }
 
 

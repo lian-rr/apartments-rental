@@ -87,7 +87,12 @@ func UpdateGuest(g *Guest) (*Guest, error) {
 	eG, err := fetchGuest(g.ID, repo)
 
 	if err != nil {
-		return nil, newError(fmt.Sprintf("Guest with id: %d not found", g.ID), err)
+		return nil, newError(fmt.Sprintf("Error retrieving the data for guest with id: %d", g.ID), err)
+	}
+
+	//Not found
+	if eG == nil {
+		return nil, nil
 	}
 
 	g.Active = eG.Active
@@ -102,7 +107,37 @@ func UpdateGuest(g *Guest) (*Guest, error) {
 
 }
 
+func DeleteGuest(id int) (*Guest, error) {
 
+	repo, err := repository.BuildGuestRepo()
+
+	if err != nil {
+		return nil, newError("Not possible to initiate the Guest Manager.", err)
+	}
+
+	defer repo.Close()
+
+	eG, err := fetchGuest(id, repo)
+
+	if err != nil {
+		return nil, newError(fmt.Sprintf("Error retrieving the data for guest with id: %d", id), err)
+	}
+
+	//Not found
+	if eG == nil {
+		return nil, nil
+	}
+
+	err = repo.DeleteGuest(id)
+
+	if err != nil {
+		return nil, newError("Not possible to delete the guest.", err)
+	}
+
+	eG.Active = false
+
+	return mapD2G(eG), nil
+}
 
 
 func fetchGuest(id int, repo repository.GuestRepo) (*repository.Guest, error) {

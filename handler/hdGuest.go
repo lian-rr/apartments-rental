@@ -79,7 +79,7 @@ func fetchGuest(w http.ResponseWriter, r * http.Request){
 	}
 
 	if g == nil {
-		w.WriteHeader(http.StatusNoContent)
+		sendError("Guest not found", http.StatusNoContent, w)
 		return
 	}
 
@@ -123,11 +123,40 @@ func updateGuest(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
+	if g == nil {
+		sendError("Guest not found", http.StatusNoContent, w)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(mapG2Response(g))
 }
 
+func deleteGuest(w http.ResponseWriter, r *http.Request){
+	p := getParams(r)
 
+	id, err := strconv.ParseInt(p["id"], 10, 64)
+
+	if err != nil {
+		sendError("Invalid format for id", http.StatusBadRequest, w)
+		return
+	}
+
+	g, err := manager.DeleteGuest(int(id))
+
+	if err != nil {
+		sendError(err.Error(), http.StatusInternalServerError, w)
+		return
+	}
+
+	if g == nil {
+		sendError("Guest not found", http.StatusNoContent, w)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(mapG2Response(g))
+}
 
 
 func mCreateRB2G(g *Guest) (*manager.Guest, error) {
