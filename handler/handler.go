@@ -22,6 +22,8 @@ func StartServer() {
 
 func startHandlers(r *mux.Router) {
 	fmt.Println("Starting handlers")
+
+	//Guest operations
 	r.HandleFunc("/guests", listGuests).Methods("GET")
 	r.HandleFunc("/guests", addGuest).Methods("POST")
 	r.HandleFunc("/guests/{id}", fetchGuest).Methods("GET")
@@ -29,14 +31,12 @@ func startHandlers(r *mux.Router) {
 	r.HandleFunc("/guests/{id}", deleteGuest).Methods("DELETE")
 }
 
-
 func commonMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		next.ServeHTTP(w, r)
 	})
 }
-
 
 type errorResp struct {
 	Message string `json:"message"`

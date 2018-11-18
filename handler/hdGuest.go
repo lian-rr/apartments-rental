@@ -18,7 +18,7 @@ type Guest struct {
 	Active  bool   `json:"active, omitempty"`
 }
 
-func listGuests(w http.ResponseWriter, r *http.Request){
+func listGuests(w http.ResponseWriter, r *http.Request) {
 
 	lg, err := manager.ListGuests()
 
@@ -60,7 +60,7 @@ func addGuest(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(mapG2Response(g))
 }
 
-func fetchGuest(w http.ResponseWriter, r * http.Request){
+func fetchGuest(w http.ResponseWriter, r *http.Request) {
 
 	p := getParams(r)
 
@@ -87,8 +87,7 @@ func fetchGuest(w http.ResponseWriter, r * http.Request){
 	json.NewEncoder(w).Encode(mapG2Response(g))
 }
 
-
-func updateGuest(w http.ResponseWriter, r *http.Request){
+func updateGuest(w http.ResponseWriter, r *http.Request) {
 	p := getParams(r)
 
 	id, err := strconv.ParseInt(p["id"], 10, 64)
@@ -132,7 +131,7 @@ func updateGuest(w http.ResponseWriter, r *http.Request){
 	json.NewEncoder(w).Encode(mapG2Response(g))
 }
 
-func deleteGuest(w http.ResponseWriter, r *http.Request){
+func deleteGuest(w http.ResponseWriter, r *http.Request) {
 	p := getParams(r)
 
 	id, err := strconv.ParseInt(p["id"], 10, 64)
@@ -157,7 +156,6 @@ func deleteGuest(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(mapG2Response(g))
 }
-
 
 func mCreateRB2G(g *Guest) (*manager.Guest, error) {
 

@@ -139,7 +139,6 @@ func DeleteGuest(id int) (*Guest, error) {
 	return mapD2G(eG), nil
 }
 
-
 func fetchGuest(id int, repo repository.GuestRepo) (*repository.Guest, error) {
 	g, err := repo.FetchGuest(id)
 
@@ -148,8 +147,6 @@ func fetchGuest(id int, repo repository.GuestRepo) (*repository.Guest, error) {
 	}
 	return g, nil
 }
-
-
 
 /*---------------------- ----- ---------------------*
 /*---------------------- Utils ---------------------*
