@@ -29,6 +29,13 @@ func startHandlers(r *mux.Router) {
 	r.HandleFunc("/guests/{id}", fetchGuest).Methods("GET")
 	r.HandleFunc("/guests/{id}", updateGuest).Methods("PUT")
 	r.HandleFunc("/guests/{id}", deleteGuest).Methods("DELETE")
+
+	//Building operations
+	r.HandleFunc("/buildings", listBuildings).Methods("GET")
+	r.HandleFunc("/buildings", addBuilding).Methods("POST")
+	r.HandleFunc("/buildings/{id}", fetchBuilding).Methods("GET")
+	r.HandleFunc("/buildings/{id}", updateBuilding).Methods("PUT")
+	r.HandleFunc("/buildings/{id}", deleteBuilding).Methods("DELETE")
 }
 
 func commonMiddleware(next http.Handler) http.Handler {

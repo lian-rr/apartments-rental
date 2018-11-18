@@ -11,19 +11,29 @@ func BuildGuestRepo() (GuestRepo, error) {
 	return buildGuestRepoSQL()
 }
 
+func BuildBuildingRepo() (BuildingRepo, error) {
+	return buildBuildingRepoSQL()
+}
+
 func buildGuestRepoSQL() (GuestRepo, error) {
 
 	db, err := sql.Open("mysql", connString)
 
 	if err != nil {
 		fmt.Printf("Error stablishing the connection with the DB: %s", err)
-		return GuestRepSQL{}, err
+		return GuestRepoSQL{}, err
 	}
 
 	return newGuestRepoSQL(db), nil
 }
 
-func Close(r GuestRepSQL) error {
-	fmt.Printf("Closing the DB connection. \n")
-	return r.db.Close()
+func buildBuildingRepoSQL() (BuildingRepo, error) {
+	db, err := sql.Open("mysql", connString)
+
+	if err != nil {
+		fmt.Printf("Error stablishing the connection with the DB: %s", err)
+		return BuildingRepoSQL{}, err
+	}
+
+	return newBuildingRepoSQL(db), nil
 }

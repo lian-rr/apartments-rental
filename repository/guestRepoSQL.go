@@ -6,16 +6,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type GuestRepSQL struct {
+type GuestRepoSQL struct {
 	db *sql.DB
 }
 
-func newGuestRepoSQL(db *sql.DB) GuestRepSQL {
-	return GuestRepSQL{db: db}
+func newGuestRepoSQL(db *sql.DB) GuestRepoSQL {
+	return GuestRepoSQL{db: db}
 }
 
 //List of guests
-func (m GuestRepSQL) ListGuests() (*[]*Guest, error) {
+func (m GuestRepoSQL) ListGuests() (*[]*Guest, error) {
 
 	rows, err := m.db.Query(`SELECT id, firstName, lastName, birthDay, gender, details, active FROM guest`)
 
@@ -41,7 +41,7 @@ func (m GuestRepSQL) ListGuests() (*[]*Guest, error) {
 }
 
 //Fetch the guest by Id
-func (m GuestRepSQL) FetchGuest(id int) (*Guest, error) {
+func (m GuestRepoSQL) FetchGuest(id int) (*Guest, error) {
 
 	rows, err := m.db.Query(`SELECT id, firstName, lastName, birthDay, gender, details, active FROM guest WHERE id = ?`, id)
 
@@ -54,7 +54,7 @@ func (m GuestRepSQL) FetchGuest(id int) (*Guest, error) {
 		g, err := parseGuest(rows)
 
 		if err != nil {
-			fmt.Printf("Error parsing the list of guests. %s\n", err)
+			fmt.Printf("Error parsing the guest. %s\n", err)
 			return nil, err
 		}
 
@@ -65,7 +65,7 @@ func (m GuestRepSQL) FetchGuest(id int) (*Guest, error) {
 }
 
 //Persist the guest
-func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
+func (m GuestRepoSQL) PersistGuest(g *Guest) (*Guest, error) {
 
 	stmt, err := m.db.Prepare(`INSERT INTO guest (firstName, lastName, birthDay, gender, details, active) VALUES (?, ?, ?, ?, ?, TRUE)`)
 
@@ -96,7 +96,7 @@ func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 }
 
 //Update the guest
-func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
+func (m GuestRepoSQL) UpdateGuest(g *Guest) (*Guest, error) {
 
 	stmt, err := m.db.Prepare(`UPDATE guest SET firstName = ?, lastName = ?, birthDay = ?, gender = ?, details = ? WHERE id = ?`)
 
@@ -116,7 +116,7 @@ func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
 }
 
 //Delete the guest by Id
-func (m GuestRepSQL) DeleteGuest(id int) error {
+func (m GuestRepoSQL) DeleteGuest(id int) error {
 	stmt, err := m.db.Prepare(`UPDATE guest SET active = FALSE WHERE id = ?`)
 
 	if err != nil {
@@ -134,8 +134,8 @@ func (m GuestRepSQL) DeleteGuest(id int) error {
 	return nil
 }
 
-//Close the database connection
-func (m GuestRepSQL) Close() error {
+//CloseGuestRepo the database connection
+func (m GuestRepoSQL) Close() error {
 	return m.db.Close()
 }
 

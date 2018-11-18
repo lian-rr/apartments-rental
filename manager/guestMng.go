@@ -35,25 +35,6 @@ func ListGuests() (*[]*Guest, error) {
 	return mapD2GList(guests), nil
 }
 
-func AddGuest(g *Guest) (*Guest, error) {
-
-	repo, err := repository.BuildGuestRepo()
-
-	if err != nil {
-		return nil, newError("Not possible to initiate the Guest Manager.", err)
-	}
-
-	defer repo.Close()
-
-	ng, err := repo.PersistGuest(mapG2D(g))
-
-	if err != nil {
-		return nil, newError("Not possible to persist new Guest.", err)
-	}
-
-	return mapD2G(ng), nil
-}
-
 func FetchGuest(id int) (*Guest, error) {
 
 	repo, err := repository.BuildGuestRepo()
@@ -72,6 +53,25 @@ func FetchGuest(id int) (*Guest, error) {
 
 	return mapD2G(g), nil
 
+}
+
+func AddGuest(g *Guest) (*Guest, error) {
+
+	repo, err := repository.BuildGuestRepo()
+
+	if err != nil {
+		return nil, newError("Not possible to initiate the Guest Manager.", err)
+	}
+
+	defer repo.Close()
+
+	ng, err := repo.PersistGuest(mapG2D(g))
+
+	if err != nil {
+		return nil, newError("Not possible to persist new Guest.", err)
+	}
+
+	return mapD2G(ng), nil
 }
 
 func UpdateGuest(g *Guest) (*Guest, error) {
@@ -152,10 +152,6 @@ func fetchGuest(id int, repo repository.GuestRepo) (*repository.Guest, error) {
 /*---------------------- Utils ---------------------*
 /*---------------------- ----- ---------------------*/
 
-func newError(m string, err error) error {
-	fmt.Printf("Error: %s", err.Error())
-	return fmt.Errorf("%s\n", m)
-}
 
 func mapG2D(g *Guest) *repository.Guest {
 	return &repository.Guest{
