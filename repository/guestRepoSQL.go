@@ -71,21 +71,21 @@ func (m GuestRepSQL) PersistGuest(g *Guest) (*Guest, error) {
 
 	if err != nil {
 		fmt.Printf("Error preparing insert statement: %s\n", err)
-		return &Guest{}, err
+		return nil, err
 	}
 
 	r, err := stmt.Exec(g.Fname, g.Lname, g.Bdate, g.Gender, g.Details)
 
 	if err != nil {
 		fmt.Printf("Error executing insert statement: %s\n", err)
-		return &Guest{}, err
+		return nil, err
 	}
 
 	id, err := r.LastInsertId()
 
 	if err != nil {
 		fmt.Printf("Error getting the new guest's id. %s\n", err)
-		return &Guest{}, err
+		return nil, err
 	}
 
 	g.ID = int(id)
@@ -102,7 +102,7 @@ func (m GuestRepSQL) UpdateGuest(g *Guest) (*Guest, error) {
 
 //Delete the guest by Id
 func (m GuestRepSQL) DeleteGuest(id int) (*Guest, error) {
-	return &Guest{}, nil
+	return nil, nil
 }
 
 //Close the database connection
