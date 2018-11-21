@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/lian-rr/apartment-rental/handler"
+	"github.com/lian-rr/apartments-rental/handler"
 )
 
 func main() {

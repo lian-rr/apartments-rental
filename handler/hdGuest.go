@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lian-rr/apartment-rental/manager"
+	"github.com/lian-rr/apartments-rental/manager"
 	"net/http"
 	"strconv"
 )

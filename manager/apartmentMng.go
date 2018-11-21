@@ -2,7 +2,7 @@ package manager
 
 import (
 	"fmt"
-	"github.com/lian-rr/apartment-rental/repository"
+	"github.com/lian-rr/apartments-rental/repository"
 )
 
 type Apartment struct {
