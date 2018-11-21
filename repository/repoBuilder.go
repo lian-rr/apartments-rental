@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-const connString = "root:rootl@tcp(mysql-dev:3308)/apartments?parseTime=true"
+const connString = "root:rootl@tcp(mysql-dev:3306)/apartments?parseTime=true"
 
 
 func getConn() (*sql.DB, error) {
