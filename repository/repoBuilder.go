@@ -31,6 +31,10 @@ func BuildApartmentRepo() (ApartmentRepo, error) {
 	return buildApartmentRepoSQL()
 }
 
+func BuildBookingRepo() (BookingRepo, error) {
+	return buildBookingRepoSQL()
+}
+
 func buildGuestRepoSQL() (GuestRepo, error) {
 
 	db, err := getConn()
@@ -60,4 +64,14 @@ func buildApartmentRepoSQL() (ApartmentRepo, error) {
 	}
 
 	return newApartmentRepoSQL(db), nil
+}
+
+func buildBookingRepoSQL() (BookingRepo, error) {
+	db, err := getConn()
+
+	if err != nil {
+		return BookingRepoSQL{}, err
+	}
+
+	return newBookingRepoSQL(db), nil
 }

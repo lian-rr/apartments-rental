@@ -163,12 +163,26 @@ func mCreateRB2G(g *Guest) (*manager.Guest, error) {
 
 	if err != nil {
 		fmt.Printf("Birth date format not invalid.")
-		return &manager.Guest{}, err
+		return nil, err
 	}
 
-	return &manager.Guest{Fname: g.Fname, Lname: g.Lname, Bdate: bDate, Gender: g.Gender, Details: g.Details}, nil
+	return &manager.Guest{
+		Fname:   g.Fname,
+		Lname:   g.Lname,
+		Bdate:   bDate,
+		Gender:  g.Gender,
+		Details: g.Details,
+	}, nil
 }
 
 func mapG2Response(g *manager.Guest) *Guest {
-	return &Guest{ID: g.ID, Fname: g.Fname, Lname: g.Lname, Bdate: parseDate2String(g.Bdate), Gender: g.Gender, Details: g.Details, Active: g.Active}
+	return &Guest{
+		ID:      g.ID,
+		Fname:   g.Fname,
+		Lname:   g.Lname,
+		Bdate:   parseDate2String(g.Bdate),
+		Gender:  g.Gender,
+		Details: g.Details,
+		Active:  g.Active,
+	}
 }

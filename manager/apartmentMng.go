@@ -55,7 +55,7 @@ func FetchApartment(id int) (*Apartment, error) {
 
 }
 
-func AddApartment(g *Apartment) (*Apartment, error) {
+func AddApartment(a *Apartment) (*Apartment, error) {
 
 	repo, err := repository.BuildApartmentRepo()
 
@@ -65,7 +65,7 @@ func AddApartment(g *Apartment) (*Apartment, error) {
 
 	defer repo.Close()
 
-	na, err := repo.PersistApartment(mapA2D(g))
+	na, err := repo.PersistApartment(mapA2D(a))
 
 	if err != nil {
 		return nil, newError("Not possible to persist new Apartment.", err)

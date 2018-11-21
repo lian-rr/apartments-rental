@@ -43,6 +43,13 @@ func startHandlers(r *mux.Router) {
 	r.HandleFunc("/apartments/{id}", fetchApartment).Methods("GET")
 	r.HandleFunc("/apartments/{id}", updateApartment).Methods("PUT")
 	r.HandleFunc("/apartments/{id}", deleteApartment).Methods("DELETE")
+
+	//Booking operations
+	r.HandleFunc("/bookings", listBookings).Methods("GET")
+	r.HandleFunc("/bookings", addBooking).Methods("POST")
+	r.HandleFunc("/bookings/{id}", fetchBooking).Methods("GET")
+	r.HandleFunc("/bookings/{id}", updateBooking).Methods("PUT")
+	r.HandleFunc("/bookings/{id}", deleteBooking).Methods("DELETE")
 }
 
 func commonMiddleware(next http.Handler) http.Handler {

@@ -55,7 +55,7 @@ func FetchBuilding(id int) (*Building, error) {
 
 }
 
-func AddBuilding(g *Building) (*Building, error) {
+func AddBuilding(b *Building) (*Building, error) {
 
 	repo, err := repository.BuildBuildingRepo()
 
@@ -65,7 +65,7 @@ func AddBuilding(g *Building) (*Building, error) {
 
 	defer repo.Close()
 
-	nb, err := repo.PersistBuilding(mapB2D(g))
+	nb, err := repo.PersistBuilding(mapB2D(b))
 
 	if err != nil {
 		return nil, newError("Not possible to persist new Building.", err)
